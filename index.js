@@ -40,7 +40,13 @@ const menuTemplate = [
             click() {
                createAddWindow();
             }
-         },
+			},
+			{
+				label: 'Clear Todos',
+				click() {
+					mainWindow.webContents.send('todo:clear');
+				}
+			},
          {
             label: 'Quit',
             accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
