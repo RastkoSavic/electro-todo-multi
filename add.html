@@ -17,7 +17,7 @@
       document.querySelector('form').addEventListener('submit', event => {
          event.preventDefault();
 
-         const { vlaue } = document.querySelector('input');
+         const { value } = document.querySelector('input');
          ipcRenderer.send('todo:add', value);
       });
    </script>

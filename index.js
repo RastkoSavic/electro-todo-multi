@@ -7,8 +7,8 @@ let addWindow;
 
 app.on('ready', () => {
    mainWindow = new BrowserWindow({});
-	mainWindow.loadURL(`file://${__dirname}/main.html`);
-	mainWindow.on('closed', () => app.quit());
+   mainWindow.loadURL(`file://${__dirname}/main.html`);
+   mainWindow.on('closed', () => app.quit());
 
    const mainMenu = Menu.buildFromTemplate(menuTemplate);
    Menu.setApplicationMenu(mainMenu);
@@ -19,13 +19,16 @@ function createAddWindow() {
       width: 300,
       height: 400,
       title: 'Add New Todo'
-	});
+   });
 
-	addWindow.loadURL(`file://${__dirname}/add.html`);
+   addWindow.loadURL(`file://${__dirname}/add.html`);
+   addWindow.on('closed', () => (addWindow = null));
 }
 
 ipcMain.on('todo:add', (event, todo) => {
-	mainWindow.webContents.send('todo:add', todo);
+   mainWindow.webContents.send('todo:add', todo);
+
+   addWindow.close();
 });
 
 const menuTemplate = [
@@ -54,16 +57,18 @@ if (process.platform === 'darwin') {
 }
 
 if (process.env.NODE_ENV !== 'production') {
-	menuTemplate.push({
-		label: 'View',
-		submenu: [
-			{
-				label: 'Toggle Developer Tools',
-				accelerator: process.platform === 'darwin' ? 'Command+Alt+I' : 'F12',
-				click(item, focusedWindow) {
-					focusedWindow.toggleDevTools();
-				}
-			}
-		]
-	})
+   menuTemplate.push({
+      label: 'View',
+      submenu: [
+         { role: 'reload' },
+         {
+            label: 'Toggle Developer Tools',
+            accelerator:
+               process.platform === 'darwin' ? 'Command+Alt+I' : 'F12',
+            click(item, focusedWindow) {
+               focusedWindow.toggleDevTools();
+            }
+         }
+      ]
+   });
 }
