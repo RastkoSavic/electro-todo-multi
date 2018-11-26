@@ -2,20 +2,23 @@
 <body>
    <form action="">
       <div>
-			<label for="">Enter your todo</label>
-			<br />
+         <label for="">Enter your todo</label> <br />
          <br />
          <input autofocus />
       </div>
       <br />
       <button type="submit">Add</button>
-	</form>
-	
-	<script>
-		document.querySelector('form').addEventListener('submit', (event) => {
-			event.preventDefault();
+   </form>
 
-			debugger;
-		});
-	</script>
+   <script>
+      const electron = require('electron');
+      const { ipcRenderer } = electron;
+
+      document.querySelector('form').addEventListener('submit', event => {
+         event.preventDefault();
+
+         const { vlaue } = document.querySelector('input');
+         ipcRenderer.send('todo:add', value);
+      });
+   </script>
 </body>
